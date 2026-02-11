@@ -3,6 +3,7 @@ from .models import (
     ExtraAsset,
     ExtraPlacement,
     FrameOutputs,
+    Region,
     Scene,
 )
 from .pipeline import AnchorStagePipeline
@@ -13,6 +14,7 @@ __all__ = [
     "ExtraAsset",
     "ExtraPlacement",
     "FrameOutputs",
+    "Region",
     "Scene",
 ]
 
