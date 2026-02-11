@@ -76,7 +76,7 @@ Pre-demo and post-demo verification sheet to confirm the five non-negotiable tec
 1. All P1-P5 marked pass.
 2. Demo runtime <= 05:15 in rehearsal.
 3. At least one rehearsal executed entirely via fallback branches.
-4. Either Eric or Greg can run full demo solo using run-of-show sheet.
+4. Either Presenter or Operator can run full demo solo using run-of-show sheet.
 
 ## Post-demo capture
 - Record audience objections linked to proof IDs.

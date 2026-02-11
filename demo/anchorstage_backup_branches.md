@@ -76,6 +76,6 @@ Rule: fallback must not change narrative claim, only evidence source.
 ## Fallback invocation protocol
 1. Owner calls "Branch" + `branch_id` out loud.
 2. Operator executes mapped fallback asset immediately.
-3. Eric states one-line continuity bridge:
+3. Presenter states one-line continuity bridge:
    - "Same proof, precomputed evidence so we stay on clock."
 4. Resume at `rejoin_point` without re-explaining prior segment.
