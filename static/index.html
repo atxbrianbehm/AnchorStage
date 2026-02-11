@@ -208,6 +208,8 @@
     let sceneReady = false;
     let hudVisible = true;
     let focalMm = 35;
+    let sceneAspect = 16/9;  // detected from uploaded image
+    let imageSize = [1280, 720];
     const lensPresets = [24, 35, 50, 85, 135, 200];
 
     console.log('AnchorStage v2.0 loaded');
@@ -295,6 +297,13 @@
       controls.dampingFactor = 0.1;
       controls.rotateSpeed = 0.6;
       controls.zoomSpeed = 1.2;
+      // Limit orbit to prevent losing the scene edges
+      controls.maxPolarAngle = Math.PI * 0.85;  // don't go fully under
+      controls.minPolarAngle = Math.PI * 0.15;  // don't go fully over
+      controls.maxAzimuthAngle = Math.PI * 0.4;  // limit horizontal rotation
+      controls.minAzimuthAngle = -Math.PI * 0.4;
+      controls.maxDistance = 3.0;  // don't zoom too far out
+      controls.minDistance = 0.1;
       controls.update();
 
       window.addEventListener('resize', () => {
@@ -328,7 +337,7 @@
       geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
       geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
       const material = new THREE.PointsMaterial({
-        size: 0.003,
+        size: parseFloat(document.getElementById('pt-size')?.value || 0.008),
         vertexColors: true,
         sizeAttenuation: true,
       });
@@ -343,8 +352,15 @@
       document.getElementById('upload-screen').classList.add('hidden');
       document.getElementById('app').style.display = 'flex';
 
+      // Detect aspect ratio from uploaded image
+      if (data.image_size) {
+        imageSize = data.image_size;
+        sceneAspect = imageSize[0] / imageSize[1];
+      }
+
       document.getElementById('stat-splats').textContent = data.num_splats.toLocaleString() + ' splats';
       document.getElementById('stat-recon').textContent = data.reconstruction_time_s + 's recon';
+      document.getElementById('stat-aspect').textContent = imageSize[0] + '×' + imageSize[1];
 
       // The pointcloud.bin endpoint triggers SHARP processing on the server
       showLoading('Generating 3D scene via Apple SHARP... (30-90s first time)');

@@ -117,11 +117,17 @@ def _run_sharp_serverless(image_path: str) -> str:
     )
     resp.raise_for_status()
     data = resp.json()
+    print(f"[SHARP] RunPod response status: {data.get('status')}")
+    print(f"[SHARP] RunPod response keys: {list(data.keys())}")
     if data.get("status") == "FAILED":
         raise RuntimeError(f"RunPod job failed: {data}")
     output = data.get("output", {})
+    if isinstance(output, str):
+        raise RuntimeError(f"SHARP returned string: {output[:500]}")
     if "error" in output:
-        raise RuntimeError(f"SHARP error: {output['error']}")
+        raise RuntimeError(f"SHARP error: {output['error']} {output.get('traceback','')[:500]}")
+    if "ply_b64" not in output:
+        raise RuntimeError(f"SHARP missing ply_b64. Output keys: {list(output.keys()) if isinstance(output, dict) else type(output)}")
     ply_bytes = b64mod.b64decode(output["ply_b64"])
     ply_file = tempfile.NamedTemporaryFile(suffix=".ply", delete=False)
     ply_file.write(ply_bytes)
